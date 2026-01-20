@@ -279,12 +279,12 @@ export const navBarConfig: NavBarConfig = {
 					icon: "material-symbols:movie",
 				},
 				{
-					name: "Diary",
+					name: "吹水",
 					url: "/diary/",
 					icon: "material-symbols:book",
 				},
 				{
-					name: "Albums",
+					name: "相册",
 					url: "/albums/",
 					icon: "material-symbols:photo-library",
 				},
