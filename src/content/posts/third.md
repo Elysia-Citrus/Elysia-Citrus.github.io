@@ -1,8 +1,8 @@
 ---
 title: 第三集：最大信息系数的推理
 published: 2026-01-20
-description: ''
-image: ''
+description: '关于MIC的实现、算法以及证明'
+image: '/covers/cover3.png'
 tags: [数学]
 category: ''
 draft: false 
