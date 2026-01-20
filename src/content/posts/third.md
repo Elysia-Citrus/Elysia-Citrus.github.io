@@ -4,7 +4,7 @@ published: 2026-01-20
 description: '关于MIC的实现、算法以及证明'
 image: '/covers/cover3.png'
 tags: [数学]
-category: ''
+category: '吹水'
 draft: false 
 lang: ''
 ---
