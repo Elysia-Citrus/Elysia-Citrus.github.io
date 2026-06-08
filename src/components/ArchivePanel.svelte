@@ -4,14 +4,7 @@ import { onMount } from "svelte";
 import I18nKey from "../i18n/i18nKey";
 import { i18n } from "../i18n/translation";
 
-export let tags: string[];
-export let categories: string[];
 export let sortedPosts: Post[] = [];
-
-const params = new URLSearchParams(window.location.search);
-tags = params.has("tag") ? params.getAll("tag") : [];
-categories = params.has("category") ? params.getAll("category") : [];
-const uncategorized = params.get("uncategorized");
 
 interface Post {
 	id: string;
@@ -31,11 +24,9 @@ interface Group {
 	posts: Post[];
 }
 
-let groups: Group[] = [];
-
 function formatDate(date: Date) {
-	const month = (date.getMonth() + 1).toString().padStart(2, "0");
-	const day = date.getDate().toString().padStart(2, "0");
+	const month = (date.getUTCMonth() + 1).toString().padStart(2, "0");
+	const day = date.getUTCDate().toString().padStart(2, "0");
 	return `${month}-${day}`;
 }
 
@@ -43,8 +34,40 @@ function formatTag(tagList: string[]) {
 	return tagList.map((t) => `#${t}`).join(" ");
 }
 
-onMount(async () => {
-	let filteredPosts: Post[] = sortedPosts;
+function groupPosts(posts: Post[]): Group[] {
+	const grouped = posts
+		.slice()
+		.sort((a, b) => b.data.published.getTime() - a.data.published.getTime())
+		.reduce(
+			(acc, post) => {
+				const year = post.data.published.getUTCFullYear();
+				if (!acc[year]) {
+					acc[year] = [];
+				}
+				acc[year].push(post);
+				return acc;
+			},
+			{} as Record<number, Post[]>,
+		);
+
+	return Object.keys(grouped)
+		.map((year) => ({
+			year: Number.parseInt(year, 10),
+			posts: grouped[Number.parseInt(year, 10)],
+		}))
+		.sort((a, b) => b.year - a.year);
+}
+
+// Render the full archive during the static build. Query-string filters are
+// applied after hydration so the archive content never depends on JavaScript.
+let groups: Group[] = groupPosts(sortedPosts);
+
+function applyUrlFilters() {
+	const params = new URLSearchParams(window.location.search);
+	const tags = params.getAll("tag");
+	const categories = params.getAll("category");
+	const uncategorized = params.has("uncategorized");
+	let filteredPosts = sortedPosts;
 
 	if (tags.length > 0) {
 		filteredPosts = filteredPosts.filter(
@@ -64,31 +87,20 @@ onMount(async () => {
 		filteredPosts = filteredPosts.filter((post) => !post.data.category);
 	}
 
-	// 按发布时间倒序排序，确保不受置顶影响
-	filteredPosts = filteredPosts
-		.slice()
-		.sort((a, b) => b.data.published.getTime() - a.data.published.getTime());
+	groups = groupPosts(filteredPosts);
+}
 
-	const grouped = filteredPosts.reduce(
-		(acc, post) => {
-			const year = post.data.published.getFullYear();
-			if (!acc[year]) {
-				acc[year] = [];
-			}
-			acc[year].push(post);
-			return acc;
-		},
-		{} as Record<number, Post[]>,
-	);
+onMount(() => {
+	applyUrlFilters();
+	window.addEventListener("popstate", applyUrlFilters);
 
-	const groupedPostsArray = Object.keys(grouped).map((yearStr) => ({
-		year: Number.parseInt(yearStr, 10),
-		posts: grouped[Number.parseInt(yearStr, 10)],
-	}));
+	const swup = (window as any).swup;
+	swup?.hooks?.on("page:view", applyUrlFilters);
 
-	groupedPostsArray.sort((a, b) => b.year - a.year);
-
-	groups = groupedPostsArray;
+	return () => {
+		window.removeEventListener("popstate", applyUrlFilters);
+		swup?.hooks?.off("page:view", applyUrlFilters);
+	};
 });
 </script>
 
