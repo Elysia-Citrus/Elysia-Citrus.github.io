@@ -129,7 +129,7 @@ export type SiteConfig = {
 					desktop?: string | string[];
 					mobile?: string | string[];
 			  }; // 支持单个图片、图片数组或分别设置桌面端和移动端图片
-		position?: "top" | "center" | "bottom";
+		position?: string; // CSS object-position，例如 "center" 或 "50% 20%"
 		carousel?: {
 			enable: boolean; // 是否启用轮播
 			interval: number; // 轮播间隔时间（秒）
@@ -409,7 +409,7 @@ export type FullscreenWallpaperConfig = {
 				desktop?: string | string[];
 				mobile?: string | string[];
 		  }; // 支持单个图片、图片数组或分别设置桌面端和移动端图片
-	position?: "top" | "center" | "bottom"; // 壁纸位置，等同于 object-position
+	position?: string; // 壁纸位置，等同于 CSS object-position
 	carousel?: {
 		enable: boolean; // 是否启用轮播
 		interval: number; // 轮播间隔时间（秒）

@@ -288,6 +288,11 @@ export const navBarConfig: NavBarConfig = {
 					url: "/albums/",
 					icon: "material-symbols:photo-library",
 				},
+				{
+					name: "数据结构算法",
+					url: "/archive/?category=算法练习",
+					icon: "material-symbols:code",
+				},
 				// {
 				// 	name: "Devices",
 				// 	url: "devices/",
