@@ -1,6 +1,6 @@
 ---
-title: 算法练习Day 1：数组与双指针
-published: 2026-06-08
+title: <题外话>算法练习 Day 1：数组与双指针
+published: 2026-06-10
 description: 记录数组基础与双指针算法的学习过程。
 image: ""
 tags: [数据结构, 算法, 数组, 双指针]
