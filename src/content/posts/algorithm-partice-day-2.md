@@ -1,6 +1,6 @@
 ---
 title: <题外话>算法练习 Day 2：滑动窗口、前缀和、模拟
-published: 2026-06-12
+published: 2026-06-11
 description: 滑动窗口、螺旋矩阵、前缀和、二维前缀和
 image: ""
 tags: [数据结构]
