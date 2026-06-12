@@ -1,5 +1,5 @@
 ---
-title: 算法练习 Day 2：链表
+title: 算法练习 Day 3：链表基础
 published: 2026-06-12
 description: 链表基础语法、移除元素、设计链表、反转链表
 image: ""
