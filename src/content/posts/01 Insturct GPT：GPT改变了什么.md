@@ -15,16 +15,22 @@ GPT-1之前，NLP每更换一个任务，就需要重新设计模型，重新标
 
 在自注意力计算时，第 i 个token可以看到 $x_1, x_2, ... x_{i-1}, x_{i}, x_{i+1}, ... x_n$ ，但是GPT的任务要求预测 $x_t$ 时决不能看到它以后的信息，因此GPT加入了一个 Causal Mask的机制，规定：
 
-$$\begin{equation}
-M_{ij} = \begin{cases}
-0, & j<=i \\
--∞,  & j > i \\
+$$
+M_{ij} =
+\begin{cases}
+0, & j \le i \\
+-\infty, & j > i
 \end{cases}
-\end{equation}$$
+$$
 
 Attention变为：
 
-$$\text{softmax} (\frac{QK^T}{\sqrt{d_k}}+M)V$$ 
+$$
+\operatorname{softmax}
+\left(
+\frac{QK^T}{\sqrt{d_k}} + M
+\right)V
+$$
 
 在增加一个负无穷之后， $e^{-∞}=0$, 因此未来token的权重就是0，想象一个下三角矩阵，右上角部分的权重为0，这样就实现了causal mask的目的，即 $\text{Attention} (i, j) = 0, j> i$ 。本质上还是不允许第 $i$ 个token关注任何比它靠后的token。
 
