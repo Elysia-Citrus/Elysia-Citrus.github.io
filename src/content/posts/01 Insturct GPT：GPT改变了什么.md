@@ -110,7 +110,7 @@ GPT-3最大的模型有175B参数，相比GPT-2增加了约117倍，这是一次
 
 同时，在这个时期起，我们不可能做大规模的调参，时间等不起，稳定性也是问题。当模型小的时候，你可以随便调学习率、batch size，训练拉了大不了重来，但是对于GPT-4这种规模，训练一次的成本是极其昂贵的。因此在训练大模型之前，能不能先预测它最终会得到什么水平？这也是GPT-4的技术报告特别强调的Predictable Scaling。
 
-![插图2](/illustrations/01_InsturctGPT_paste2.png)
+![插图2](/illustrations/01_InsturctGPT_paste3.png)
 
 这张图的横轴是compute, 纵轴是bits per word，本质上就是语言建模误差。OpenAI先训练很多小的模型，得到一组 $(C_i, L_i)$ ，其中 $C_i$ 是训练算力， $L_i$ 是最终的loss，然后拟合scaling law得到 $L(C)≈aC^b+c$ ，再外推到GPT-4的规模。然后发现实际的loss和预测的loss确实是相近的，说明大模型最后会训练成什么样，已经能在一定程度上提前估计，这意味着训练大模型开始从”炼丹“走向了工程。
 
